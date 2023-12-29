@@ -7,17 +7,17 @@ function Home() {
   const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
-    // Fetch books from Firestore
+    // Fetch books from Firestore with user information
     const fetchBooks = async () => {
       try {
-        const querySnapshot = await getDocs(collection(db, "books"));
+        const querySnapshot = await getDocs(collection(db, 'books'));
         const booksData = querySnapshot.docs.map((doc) => ({
           id: doc.id,
           ...doc.data(),
         }));
         setBooks(booksData);
       } catch (error) {
-        console.error("Error fetching books:", error.message);
+        console.error('Error fetching books:', error.message);
       }
     };
 
@@ -112,6 +112,15 @@ function Home() {
                 <img
                   src={book.imageUrl}
                   alt={book.title}
+                  className="mt-4 rounded-md shadow-md"
+                />
+                
+              )}
+              <p className="font-normal">{`Uploaded by: ${book.displayName}`}</p>
+              {book.userPic && (
+                <img
+                  src={book.userPic}
+                  alt={book.displayName}
                   className="mt-4 rounded-md shadow-md"
                 />
               )}

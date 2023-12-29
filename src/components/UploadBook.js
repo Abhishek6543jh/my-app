@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { storage, db } from '../config/firebase';
+import { storage, db, auth } from '../config/firebase'; // Assuming 'auth' is your Firebase authentication instance
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { collection, addDoc } from 'firebase/firestore';
 import { toast } from 'react-toastify';
@@ -14,7 +14,7 @@ const BookUpload = () => {
     image: null,
   });
 
-  const [loading, setLoading] = useState(false); // New loading state
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -28,11 +28,10 @@ const BookUpload = () => {
 
   const handleUpload = async () => {
     try {
-      setLoading(true); // Set loading to true when starting the upload
+      setLoading(true);
 
       const { title, author, publisher, publishedDate, image } = bookDetails;
 
-      // Upload image to Firebase Storage
       const storageRef = ref(storage, `bookImages/${image.name}`);
       const uploadTask = uploadBytes(storageRef, image);
 
@@ -40,7 +39,9 @@ const BookUpload = () => {
         .then(async (snapshot) => {
           const imageUrl = await getDownloadURL(snapshot.ref);
 
-          // Add book details and image URL to Firestore
+          // Use currentUser to access the currently authenticated user
+          const currentUser = auth.currentUser;
+
           const booksRef = collection(db, 'books');
           await addDoc(booksRef, {
             title,
@@ -48,9 +49,11 @@ const BookUpload = () => {
             publisher,
             publishedDate,
             imageUrl,
+            userId: currentUser.uid,
+            displayName: currentUser.displayName,
+            userPic: currentUser.photoURL,
           });
 
-          // Reset form
           setBookDetails({
             title: '',
             author: '',
@@ -59,22 +62,20 @@ const BookUpload = () => {
             image: null,
           });
 
-          setLoading(false); // Set loading to false after the upload is complete
+          setLoading(false);
 
-          // Show success toast notification
           toast.success('Book uploaded successfully!', {
             position: toast.POSITION.TOP_RIGHT,
-            autoClose: 1000, // Auto close after 2 seconds
+            autoClose: 1000,
           });
         })
         .catch((error) => {
           console.error('Error uploading image:', error.message);
-          setLoading(false); // Set loading to false in case of an error
+          setLoading(false);
 
-          // Show error toast notification
           toast.error(`Error uploading image: ${error.message}`, {
             position: toast.POSITION.TOP_RIGHT,
-            autoClose: 5000, // Auto close after 5 seconds
+            autoClose: 5000,
           });
         });
     } catch (error) {

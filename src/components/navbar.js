@@ -111,6 +111,13 @@ const Navbar = () => {
                     >
                       Upload
                     </a>
+                    <a
+                      href="/my-uploaded-books"
+                      className="block px-4 py-2 text-sm text-teal-700 hover:bg-teal-100"
+                      role="menuitem"
+                    >
+                      Uploaded books
+                    </a>
                   </div>
                 </div>
               )}
