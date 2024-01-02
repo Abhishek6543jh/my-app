@@ -1,4 +1,4 @@
-
+// Assuming your original Home.js file is located at '../components/Home.js'
 import React, { useState, useEffect } from "react";
 import { db } from "../config/firebase";
 import { collection, getDocs } from "firebase/firestore";
@@ -8,7 +8,6 @@ function Home() {
   const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
-    // Fetch books from Firestore with user information
     const fetchBooks = async () => {
       try {
         const querySnapshot = await getDocs(collection(db, 'books'));
@@ -25,58 +24,9 @@ function Home() {
     fetchBooks();
   }, []);
 
-  // Rabin-Karp search function
-  const rabinKarpSearch = (text, pattern) => {
-    const prime = 101; // A prime number for hash calculation
-    const patternLength = pattern.length;
-    const textLength = text.length;
-
-    // Calculate hash for the first window of text and pattern
-    const calculateHash = (str, length) => {
-      let hash = 0;
-      for (let i = 0; i < length; i++) {
-        hash += str.charCodeAt(i) * Math.pow(prime, i);
-      }
-      return hash;
-    };
-
-    // Rolling hash calculation
-    const recalculateHash = (oldHash, oldChar, newChar, patternLength) => {
-      const newHash =
-        (oldHash - oldChar.charCodeAt(0)) / prime +
-        newChar.charCodeAt(patternLength - 1) * Math.pow(prime, patternLength - 1);
-      return newHash;
-    };
-
-    // Iterate through the text to find matches
-    const result = [];
-    const patternHash = calculateHash(pattern, patternLength);
-    let textHash = calculateHash(text, patternLength);
-
-    for (let i = 0; i <= textLength - patternLength; i++) {
-      const currentWindow = text.substring(i, i + patternLength);
-
-      if (textHash === patternHash && currentWindow === pattern) {
-        result.push(i); // Match found
-      }
-
-      // Calculate hash for the next window
-      if (i < textLength - patternLength) {
-        textHash = recalculateHash(
-          textHash,
-          text[i],
-          text[i + patternLength],
-          patternLength
-        );
-      }
-    }
-
-    return result;
-  };
-
-  // Filter books based on the search term using Rabin-Karp
   const filteredBooks = books.filter((book) =>
-    rabinKarpSearch(book.title.toLowerCase(), searchTerm.toLowerCase()).length > 0
+    book.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    book.author.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
@@ -98,9 +48,8 @@ function Home() {
       {filteredBooks.length > 0 ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {filteredBooks.map((book) => (
-            <a
+            <div
               key={book.id}
-              href="#"
               className="block max-w-sm p-6 bg-gray-800 border border-gray-600 rounded-lg shadow-lg hover:bg-gray-700 transition duration-300 ease-in-out"
             >
               <h5 className="mb-2 text-2xl font-bold tracking-tight">
@@ -115,7 +64,6 @@ function Home() {
                   alt={book.title}
                   className="mt-4 rounded-md shadow-md"
                 />
-                
               )}
               <p className="font-normal">{`Uploaded by: ${book.displayName}`}</p>
               {book.userPic && (
@@ -125,7 +73,7 @@ function Home() {
                   className="mt-4 rounded-md shadow-md"
                 />
               )}
-            </a>
+            </div>
           ))}
         </div>
       ) : (
