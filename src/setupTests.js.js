@@ -1,5 +1,9 @@
 import '@testing-library/jest-dom';
-import { configure } from '@testing-library/react';
-import Adapter from 'enzyme-adapter-react-18';
+import 'jest-extended'; // If you want to use Jest Extended matchers
+import { render } from '@testing-library/react';
 
-configure({ adapter: new Adapter() });
+// Add a global render function to render components in tests
+global.render = render;
+
+// Make React available globally
+global.React = require('react');
