@@ -3,6 +3,7 @@ import Navbar from "./components/navbar";
 import Home from "./components/home";
 import BookUpload from "./components/UploadBook";
 import MyUploadedBooks from "./components/MyUploadedBooks";
+
 const App = () => {
   return (
     <Router>
@@ -11,6 +12,7 @@ const App = () => {
         <Route path="/" element={<Home />} />
         <Route path="/upload" element={<BookUpload />} />
         <Route path="/my-uploaded-books" element={<MyUploadedBooks />} />
+      
       </Routes>
     </Router>
   );
