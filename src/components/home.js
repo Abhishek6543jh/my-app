@@ -31,6 +31,7 @@ function Home() {
 
   return (
     <div className="bg-white-900 text-black p-8">
+    <h1 className="text-5xl font-bold mb-4">Books</h1>
       {/* Search Bar */}
       <div className="mb-4">
         <input

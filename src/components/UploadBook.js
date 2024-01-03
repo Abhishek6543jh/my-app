@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { storage, db, auth } from '../config/firebase'; // Assuming 'auth' is your Firebase authentication instance
+import { storage, db, auth } from '../config/firebase';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { collection, addDoc } from 'firebase/firestore';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { AiOutlineUpload } from 'react-icons/ai';
 
 const BookUpload = () => {
   const [bookDetails, setBookDetails] = useState({
@@ -39,7 +40,6 @@ const BookUpload = () => {
         .then(async (snapshot) => {
           const imageUrl = await getDownloadURL(snapshot.ref);
 
-          // Use currentUser to access the currently authenticated user
           const currentUser = auth.currentUser;
 
           const booksRef = collection(db, 'books');
@@ -84,9 +84,9 @@ const BookUpload = () => {
   };
 
   return (
-    <div className="bg-gray-800 text-white p-4 rounded-md shadow-lg">
+    <div className="bg-gray-400 text-white p-4 rounded-lg shadow-lg- ml-80 mr-80 mt-10">
       <h2 className="text-2xl font-semibold mb-4">Upload Book</h2>
-      <form className="space-y-4">
+      <form className="space-y-2">
         <label className="block text-white">
           <span>Title:</span>
           <input
@@ -129,16 +129,17 @@ const BookUpload = () => {
         </label>
         <label className="block text-white">
           <span>Image:</span>
-          <div className="mt-1 p-2 border rounded-md w-full text-black bg-white focus:outline-none focus:ring focus:border-blue-300">
+          <div className="mt-1 p-2 border rounded-md w-full text-black bg-white focus:outline-none focus:ring focus:border-blue-300 flex items-center">
             <input
               type="file"
               accept="image/*"
               onChange={handleImageChange}
               className="hidden"
             />
-            <span className="inline-block cursor-pointer">
-              {bookDetails.image ? bookDetails.image.name : 'No file chosen'}
-            </span>
+            <label className="cursor-pointer flex items-center">
+              <AiOutlineUpload className="mr-2" />
+              <span>{bookDetails.image ? bookDetails.image.name : 'No file chosen'}</span>
+            </label>
           </div>
         </label>
 
