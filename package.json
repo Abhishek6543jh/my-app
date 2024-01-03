@@ -47,7 +47,11 @@
   },
   "devDependencies": {
     "@babel/preset-react": "^7.23.3",
+    "@babel/register": "^7.23.7",
     "babel-jest": "^29.7.0",
-    "jsdom": "^23.0.1"
+    "chai": "^5.0.0",
+    "jest-environment-jsdom": "^29.7.0",
+    "jsdom": "^23.0.1",
+    "mocha": "^10.2.0"
   }
 }
