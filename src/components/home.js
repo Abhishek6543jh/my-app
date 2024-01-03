@@ -30,9 +30,7 @@ function Home() {
   );
 
   return (
-    <div className="bg-gray-900 text-white p-8">
-      <h1 className="text-3xl font-semibold mb-4">Books</h1>
-
+    <div className="bg-white-900 text-black p-8">
       {/* Search Bar */}
       <div className="mb-4">
         <input
@@ -51,14 +49,27 @@ function Home() {
             <div
               key={book.id}
               data-testid={`${book.id}`}
-              className="block max-w-sm p-6 bg-gray-800 border border-gray-600 rounded-lg shadow-lg hover:bg-gray-700 transition duration-300 ease-in-out"
+              className="block max-w-sm p-6 bg-white border border-gray-600 rounded-lg shadow-lg hover:bg-gray-100 transition duration-300 ease-in-out"
             >
-              <h5 className="mb-2 text-2xl font-bold tracking-tight">
-                {book.title}
-              </h5>
+              {/* Book Uploader's Profile Picture and Name */}
+              <div className="flex items-center mb-4">
+                <img
+                  src={book.userPic}
+                  alt={book.displayName}
+                  className="w-8 h-8 rounded-full mr-2"
+                />
+                <h5 className="text-lg font-bold tracking-tight">{book.displayName}</h5>
+              </div>
+
+              {/* Book Title */}
+              <h5 className="text-xl font-bold mb-2">{book.title}</h5>
+
+              {/* Book Details */}
               <p className="font-normal">{`Author: ${book.author}`}</p>
               <p className="font-normal">{`Publisher: ${book.publisher}`}</p>
               <p className="font-normal">{`Published Date: ${book.publishedDate}`}</p>
+
+              {/* Book Image */}
               {book.imageUrl && (
                 <img
                   src={book.imageUrl}
@@ -66,15 +77,8 @@ function Home() {
                   className="mt-4 rounded-md shadow-md"
                 />
               )}
-              <p className="font-normal">{`Uploaded by: ${book.displayName}`}</p>
-              {book.userPic && (
-                <img
-                  src={book.userPic}
-                  alt={book.displayName}
-                  className="mt-4 rounded-md shadow-md"
-                />
-              )}
-            
+
+              
             </div>
           ))}
         </div>

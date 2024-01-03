@@ -30,7 +30,7 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="bg-gray-800 bg-opacity-80 p-6">
+    <nav className="bg-teal-700 p-6">
       <div className="flex items-center justify-between">
         <div className="text-white">
           <span className="font-semibold text-xl tracking-tight">
@@ -39,7 +39,7 @@ const Navbar = () => {
         </div>
         <a
           href="/"
-          className="text-white hover:text-white px-4 py-2"
+          className="text-white hover:text-gray-200 px-4 py-2"
         >
           Home
         </a>
