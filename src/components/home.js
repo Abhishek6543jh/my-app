@@ -50,6 +50,7 @@ function Home() {
           {filteredBooks.map((book) => (
             <div
               key={book.id}
+              data-testid={`${book.id}`}
               className="block max-w-sm p-6 bg-gray-800 border border-gray-600 rounded-lg shadow-lg hover:bg-gray-700 transition duration-300 ease-in-out"
             >
               <h5 className="mb-2 text-2xl font-bold tracking-tight">
@@ -73,6 +74,7 @@ function Home() {
                   className="mt-4 rounded-md shadow-md"
                 />
               )}
+            
             </div>
           ))}
         </div>
