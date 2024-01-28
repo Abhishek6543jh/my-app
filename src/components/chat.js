@@ -1,8 +1,6 @@
-// Chat.js
-
-import { addDoc, collection, onSnapshot, orderBy, query, serverTimestamp } from "firebase/firestore";
 import React, { useState, useEffect, useRef } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
+import { addDoc, collection, onSnapshot, orderBy, query, serverTimestamp } from "firebase/firestore";
 import { db, auth } from "../config/firebase";
 
 function generateChatId(bookId) {
@@ -13,6 +11,7 @@ function Chat() {
   const { bookId } = useParams();
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
+  const [showAlert, setShowAlert] = useState(false);
 
   const currentUser = auth.currentUser;
   const messagesEndRef = useRef(null);
@@ -20,6 +19,12 @@ function Chat() {
   useEffect(() => {
     const fetchBookChat = async () => {
       try {
+        if (!currentUser) {
+          // If user is not logged in, show custom alert and set showAlert to true
+          setShowAlert(true);
+          return;
+        }
+
         const q = query(
           collection(db, "book-chats", generateChatId(bookId), "messages"),
           orderBy("timestamp")
@@ -38,7 +43,7 @@ function Chat() {
     };
 
     fetchBookChat();
-  }, [bookId]);
+  }, [bookId, currentUser]);
 
   const handleSendMessage = async () => {
     const chatId = generateChatId(bookId);
@@ -70,6 +75,12 @@ function Chat() {
   return (
     <div className="bg-gray-200 text-black p-8 min-h-screen">
       <h1 className="text-5xl font-bold mb-4">Chat</h1>
+
+      {showAlert && (
+        <div className="bg-red-500 p-4 mb-4 text-white rounded-md">
+          <p>You need to log in to access the chat. <Link to="/">Go back to Home</Link></p>
+        </div>
+      )}
 
       <div className="max-h-80 overflow-y-auto mb-4">
         {messages.map((message, index) => (
