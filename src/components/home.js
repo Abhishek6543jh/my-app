@@ -1,7 +1,9 @@
-// Assuming your original Home.js file is located at '../components/Home.js'
+// Home.js
+
 import React, { useState, useEffect } from "react";
-import { db } from "../config/firebase";
+import { db, auth } from "../config/firebase";
 import { collection, getDocs } from "firebase/firestore";
+import { Link } from "react-router-dom";
 
 function Home() {
   const [books, setBooks] = useState([]);
@@ -31,7 +33,7 @@ function Home() {
 
   return (
     <div className="bg-white-900 text-black p-8">
-    <h1 className="text-5xl font-bold mb-4">Books</h1>
+      <h1 className="text-5xl font-bold mb-4">Books</h1>
       {/* Search Bar */}
       <div className="mb-4">
         <input
@@ -78,8 +80,14 @@ function Home() {
                   className="mt-4 rounded-md shadow-md"
                 />
               )}
-
               
+              {/* Start Chat Link */}
+              <Link
+                to={`/book-chat/${book.id}`} // Use book id in the link
+                className="bg-blue-500 text-white py-2 px-4 rounded-md mt-4 hover:bg-blue-600"
+              >
+                Join Book Chat
+              </Link>
             </div>
           ))}
         </div>

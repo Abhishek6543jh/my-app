@@ -52,6 +52,7 @@ const BookUpload = () => {
             userId: currentUser.uid,
             displayName: currentUser.displayName,
             userPic: currentUser.photoURL,
+            email: currentUser.email,
           });
 
           setBookDetails({
