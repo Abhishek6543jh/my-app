@@ -4,6 +4,7 @@ import Home from "./components/home";
 import BookUpload from "./components/UploadBook";
 import MyUploadedBooks from "./components/MyUploadedBooks";
 import Chat from "./components/chat";
+import './App.css'
 const App = () => {
   return (
     <Router>

@@ -1,11 +1,14 @@
+// Navbar.js
+
 import React, { useState, useEffect } from "react";
 import Logout from "./signOut";
 import { auth, googleProvider } from "../config/firebase";
 import { signInWithPopup } from "firebase/auth";
+import { FaSignOutAlt, FaUpload } from "react-icons/fa"; // Import icons as needed
+import { Link } from "react-router-dom"; // Import Link
 
 const Navbar = () => {
   const [user, setUser] = useState(null);
-  const [showMenu, setShowMenu] = useState(false);
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((authUser) => {
@@ -21,111 +24,50 @@ const Navbar = () => {
     signInWithPopup(auth, googleProvider);
   };
 
-  const toggleMenu = () => {
-    setShowMenu(!showMenu);
-  };
-
-  const closeMenu = () => {
-    setShowMenu(false);
-  };
-
   return (
-    <nav className="bg-teal-700 p-6">
+    <nav className="bg-blue-500 p-4">
       <div className="flex items-center justify-between">
         <div className="text-white">
-          <span className="font-semibold text-xl tracking-tight">
+          <Link to="/" className="font-semibold text-xl tracking-tight">
             Book Exchange
-          </span>
+          </Link>
         </div>
-        <a
-          href="/"
-          className="text-white hover:text-gray-200 px-4 py-2"
-        >
-          Home
-        </a>
-        <div className="block lg:hidden">
-          <button
-            onClick={toggleMenu}
-            className="flex items-center px-3 py-2 border rounded text-teal-200 border-teal-400 hover:text-white hover:border-white"
-          >
-            <svg
-              className="fill-current h-3 w-3"
-              viewBox="0 0 20 20"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <title>Menu</title>
-              <path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z" fillRule="evenodd" />
-            </svg>
-          </button>
+        <div className="flex items-center space-x-4">
+          <Link to="/" className="text-white hover:text-gray-200">
+            Home
+          </Link>
+          {user && (
+            <>
+              <Link to="/my-uploaded-books" className="text-white hover:text-gray-200">
+                Uploaded Books
+              </Link>
+              <Link to="/upload" className="text-white hover:text-gray-200">
+                Upload
+              </Link>
+            </>
+          )}
         </div>
-        <div className="w-full hidden lg:flex lg:items-center lg:justify-end">
+        <div className="flex items-center space-x-4">
           {user ? (
-            <div className="relative inline-block text-left">
-              <div>
-                <button
-                  onClick={toggleMenu}
-                  className="flex items-center text-teal-200 hover:text-white focus:outline-none"
-                >
-                  <img
-                    src={auth?.currentUser?.photoURL}
-                    alt="Profile"
-                    className="w-8 h-8 rounded-full mr-2"
-                  />
-                  <span className="text-white">{user.displayName}</span>
-                  <svg
-                    className="ml-2 h-4 w-4"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M9.293 5.293a1 1 0 0 1 1.414 0l5 5a1 1 0 0 1 0 1.414l-5 5a1 1 0 0 1-1.414-1.414L13.586 12H3a1 1 0 0 1 0-2h10.586L9.293 6.707a1 1 0 0 1 0-1.414z"
-                    ></path>
-                  </svg>
-                </button>
-              </div>
-              {showMenu && (
-                <div className="absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
-                  <div
-                    className="py-1"
-                    role="menu"
-                    aria-orientation="vertical"
-                    aria-labelledby="options-menu"
-                  >
-                    <a
-                      onClick={() => {
-                        Logout();
-                        closeMenu();
-                      }}
-                      href="/"
-                      className="block px-4 py-2 text-sm text-teal-700 hover:bg-teal-100"
-                      role="menuitem"
-                    >
-                      Logout
-                    </a>
-                    <a
-                      href="/upload"
-                      className="block px-4 py-2 text-sm text-teal-700 hover:bg-teal-100"
-                      role="menuitem"
-                    >
-                      Upload
-                    </a>
-                    <a
-                      href="/my-uploaded-books"
-                      className="block px-4 py-2 text-sm text-teal-700 hover:bg-teal-100"
-                      role="menuitem"
-                    >
-                      Uploaded books
-                    </a>
-                  </div>
-                </div>
-              )}
+            <div className="flex items-center">
+              <img
+                src={auth?.currentUser?.photoURL}
+                alt="Profile"
+                className="w-8 h-8 rounded-full"
+              />
+              <span className="text-white">{user.displayName}</span>
+              <button
+                onClick={() => Logout()}
+                className="text-white hover:text-gray-200"
+              >
+                <FaSignOutAlt className="inline-block ml-3" />
+              </button>
+              
             </div>
           ) : (
             <button
               type="button"
-              className="text-white bg-[#4285F4] hover:bg-[#4285F4]/90 focus:ring-4 focus:outline-none focus:ring-[#4285F4]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-[#4285F4]/55 me-2 mb-2"
+              className="text-white bg-[#4285F4] hover:bg-[#4285F4]/90 focus:ring-4 focus:outline-none focus:ring-[#4285F4]/50 font-medium rounded text-sm px-4 py-2.5 text-center inline-flex items-center dark:focus:ring-[#4285F4]/55"
               onClick={handleLogin}
             >
               <svg
