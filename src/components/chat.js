@@ -63,6 +63,10 @@ function Chat() {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]); // Scroll to bottom whenever messages change
+
   return (
     <div className="bg-gray-200 text-black p-8 min-h-screen">
       <h1 className="text-5xl font-bold mb-4">Chat</h1>

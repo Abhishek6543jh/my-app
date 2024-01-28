@@ -32,7 +32,7 @@ function Home() {
   );
 
   return (
-    <div className="bg-gray-100 text-gray-800 p-8">
+    <div className="bg-gray-300 text-gray-800 p-8">
       <h1 className="text-4xl sm:text-5xl font-bold mb-4">Explore Books</h1>
       {/* Search Bar */}
       <div className="mb-4">
@@ -70,7 +70,7 @@ function Home() {
                   alt={book.displayName}
                   className="w-10 h-10 rounded-full mr-2"
                 />
-                <h5 className="text-base text- sm:text-lg font-bold tracking-tight">{book.displayName}</h5>
+                <h5 className="text-base text-gray-200 sm:text-lg font-bold tracking-tight">{book.displayName}</h5>
               </div>
 
               <div className="p-4">
@@ -87,7 +87,7 @@ function Home() {
                   to={`/book-chat/${book.id}`} // Use book id in the link
                   className="bg-blue-500 text-white py-2 px-4 rounded-md inline-block hover:bg-blue-600"
                 >
-                  Join Book Chat
+                  Chat
                 </Link>
               </div>
             </div>
