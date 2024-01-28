@@ -63,6 +63,10 @@ function Chat() {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]); // Scroll to bottom whenever messages change
+
   return (
     <div className="bg-gray-200 text-black p-8 min-h-screen">
       <h1 className="text-5xl font-bold mb-4">Chat</h1>
@@ -77,7 +81,7 @@ function Chat() {
           >
             <div
               className={`${
-                message.sender.uid !== currentUser.uid ? "bg-white" : "bg-blue-500"
+                message.sender.uid !== currentUser.uid ? "bg-white" : "bg-blue-400"
               } p-3 rounded-lg`}
             >
               {message.sender.uid !== currentUser.uid && (
@@ -87,12 +91,13 @@ function Chat() {
                     alt={message.sender.name}
                     className="w-8 h-8 rounded-full mr-2"
                   />
-                  <span className="text-gray-700">{message.sender.name}</span>
+                  <span className="text-gray-900">{message.sender.name}</span>
                 </div>
               )}
               <p className={message.sender.uid !== currentUser.uid ? "text-black" : "text-white"}>
                 {message.text}
               </p>
+              <p className="text-xs text-gray-800 mt-1">{new Date(message.timestamp?.seconds * 1000).toLocaleString()}</p>
             </div>
           </div>
         ))}
