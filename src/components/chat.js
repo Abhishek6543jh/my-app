@@ -1,7 +1,7 @@
 // Chat.js
 
-import { addDoc, collection, getDocs, query, where, orderBy, onSnapshot, serverTimestamp } from "firebase/firestore";
-import React, { useState, useEffect } from "react";
+import { addDoc, collection, onSnapshot, orderBy, query, serverTimestamp } from "firebase/firestore";
+import React, { useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
 import { db, auth } from "../config/firebase";
 
@@ -10,26 +10,30 @@ function generateChatId(bookId) {
 }
 
 function Chat() {
-  const { bookId } = useParams(); // Assuming you're passing book id directly in the route
+  const { bookId } = useParams();
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
+
+  const currentUser = auth.currentUser;
+  const messagesEndRef = useRef(null);
 
   useEffect(() => {
     const fetchBookChat = async () => {
       try {
         const q = query(
-          collection(db, 'book-chats', generateChatId(bookId), 'messages'),
-          orderBy('timestamp')
+          collection(db, "book-chats", generateChatId(bookId), "messages"),
+          orderBy("timestamp")
         );
 
         const unsubscribe = onSnapshot(q, (querySnapshot) => {
           const data = querySnapshot.docs.map((doc) => doc.data());
           setMessages(data);
+          scrollToBottom();
         });
 
         return () => unsubscribe();
       } catch (error) {
-        console.error('Error fetching book chat:', error.message);
+        console.error("Error fetching book chat:", error.message);
       }
     };
 
@@ -40,28 +44,59 @@ function Chat() {
     const chatId = generateChatId(bookId);
 
     try {
-      const docRef = await addDoc(collection(db, 'book-chats', chatId, 'messages'), {
+      await addDoc(collection(db, "book-chats", chatId, "messages"), {
         text: newMessage,
-        sender: auth.currentUser.email,
+        sender: {
+          uid: currentUser.uid,
+          name: currentUser.displayName,
+          pic: currentUser.photoURL,
+        },
         timestamp: serverTimestamp(),
       });
-      console.log("Message sent with ID: ", docRef.id);
       setNewMessage("");
     } catch (error) {
       console.error("Error sending message: ", error.message);
     }
   };
 
-  return (
-    <div className="bg-white-900 text-black p-8">
-      <h1 className="text-5xl font-bold mb-4">Book Chat</h1>
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
 
-      <div className="max-h-80 overflow-y-auto border p-4 mb-4">
+  return (
+    <div className="bg-gray-200 text-black p-8 min-h-screen">
+      <h1 className="text-5xl font-bold mb-4">Chat</h1>
+
+      <div className="max-h-80 overflow-y-auto mb-4">
         {messages.map((message, index) => (
-          <div key={index} className={`text-${message.sender === auth.currentUser.email ? 'right' : 'left'}`}>
-            <p>{message.text}</p>
+          <div
+            key={index}
+            className={`flex ${
+              message.sender.uid === currentUser.uid ? "justify-end" : "justify-start"
+            } mb-2`}
+          >
+            <div
+              className={`${
+                message.sender.uid !== currentUser.uid ? "bg-white" : "bg-blue-500"
+              } p-3 rounded-lg`}
+            >
+              {message.sender.uid !== currentUser.uid && (
+                <div className="flex items-center mb-2">
+                  <img
+                    src={message.sender.pic}
+                    alt={message.sender.name}
+                    className="w-8 h-8 rounded-full mr-2"
+                  />
+                  <span className="text-gray-700">{message.sender.name}</span>
+                </div>
+              )}
+              <p className={message.sender.uid !== currentUser.uid ? "text-black" : "text-white"}>
+                {message.text}
+              </p>
+            </div>
           </div>
         ))}
+        <div ref={messagesEndRef} />
       </div>
 
       <div className="flex gap-4">
