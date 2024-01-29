@@ -36,6 +36,12 @@ const Navbar = () => {
           <Link to="/" className="text-white hover:text-gray-200">
             Home
           </Link>
+          <Link to="/" className="text-white hover:text-gray-200">
+            About
+          </Link>
+          <Link to="/" className="text-white hover:text-gray-200">
+            Help
+          </Link>
           {user && (
             <>
               <Link to="/my-uploaded-books" className="text-white hover:text-gray-200">
