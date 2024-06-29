@@ -5,13 +5,13 @@ import { getFirestore } from "firebase/firestore";
 import { getStorage } from 'firebase/storage';
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCoRTBKFexe9oc1F77KuY_dH9xnM1kS9FE",
-  authDomain: "bookexchange-7e8ea.firebaseapp.com",
-  projectId: "bookexchange-7e8ea",
-  storageBucket: "bookexchange-7e8ea.appspot.com",
-  messagingSenderId: "997573455704",
-  appId: "1:997573455704:web:0746dcd068175ab0b4ff2d",
-  measurementId: "G-5P72MMFS83"
+  apiKey: "",
+  authDomain: "",
+  projectId: "",
+  storageBucket: "",
+  messagingSenderId: "",
+  appId: "",
+  measurementId: ""
 };
 
 // Initialize Firebaseimport { useState, useEffect } from "react";
